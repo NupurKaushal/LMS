@@ -109,5 +109,6 @@ public class AdminController {
     @DeleteMapping("/borrowRecords/{id}")
     public void deleteBorrowRecord(@PathVariable Long id) {
         adminService.deleteBorrowRecord(id);
+
     }
 }

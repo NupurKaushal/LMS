@@ -53,4 +53,5 @@ public class BookService {
         bookRepository.save(book);
         log.info("Restored book with id: {}", id);
     }
+
 }
