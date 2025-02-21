@@ -33,6 +33,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'mysql:mysql-connector-java:8.0.23'
 	implementation 'org.hibernate:hibernate-core:6.0.0.Final'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '3.4.2'
 
 }
 

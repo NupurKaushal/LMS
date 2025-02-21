@@ -70,6 +70,10 @@ public class UserService {
         bookRepository.save(book);
     }
 
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
     public List<BorrowRecord> getUserBorrowedBooks(Long userId){
         return borrowRecordRepository.findByUserId(userId);
     }
