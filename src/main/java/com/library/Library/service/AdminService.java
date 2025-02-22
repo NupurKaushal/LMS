@@ -8,21 +8,27 @@ import com.library.Library.repository.AdminRepository;
 import com.library.Library.repository.BookRepository;
 import com.library.Library.repository.UserRepository;
 import com.library.Library.repository.BorrowRecordRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AdminService {
 
-    private final AdminRepository adminRepository;
-    private final BookRepository bookRepository;
-    private final UserRepository userRepository;
-    private final BorrowRecordRepository borrowRecordRepository;
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BorrowRecordRepository borrowRecordRepository;
 
     // Admin management methods
     public Admin getAdminByEmail(String email) {
