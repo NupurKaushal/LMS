@@ -15,9 +15,10 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "LONG")
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String name;
 
     @Column(nullable = false, unique = true)

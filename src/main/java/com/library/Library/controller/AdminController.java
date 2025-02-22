@@ -5,17 +5,17 @@ import com.library.Library.model.Book;
 import com.library.Library.model.User;
 import com.library.Library.model.BorrowRecord;
 import com.library.Library.service.AdminService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
-@RequiredArgsConstructor
 public class AdminController {
 
-    private final AdminService adminService;
+    @Autowired
+    private AdminService adminService;
 
     // Admin management endpoints
     @GetMapping("/admins/{email}")

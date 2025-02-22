@@ -3,8 +3,8 @@ package com.library.Library.controller;
 import com.library.Library.model.BorrowRecord;
 import com.library.Library.model.User;
 import com.library.Library.service.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    private final UserService userService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user){
