@@ -9,6 +9,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:latest
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: cfg@1234
+          MYSQL_DATABASE: library
 
     steps:
       - uses: actions/checkout@v3
@@ -22,8 +30,21 @@ jobs:
       - name: Grant execute permission for Gradle
         run: chmod +x gradlew
 
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping -h"localhost" --silent; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
+        env:
+          MYSQL_ROOT_PASSWORD: cfg@1234
+
       - name: Build with Gradle Wrapper
-        run: ./gradlew clean build
+        run: ./gradlew build
 
       - name: Run Tests
         run: ./gradlew test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/library
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: cfg@1234
