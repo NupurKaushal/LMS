@@ -26,6 +26,10 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+      env:
+        SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/library
+        SPRING_DATASOURCE_USERNAME: root
+        SPRING_DATASOURCE_PASSWORD: cfg@1234
 
     - name: Run Tests
       run: ./gradlew test
