@@ -34,9 +34,13 @@ public class UserController {
 
     @PostMapping("/{userId}/borrow/{bookId}")
     public ResponseEntity<String> borrowBook(@PathVariable Long userId, @PathVariable Long bookId){
-        log.info("user borrowed book");
-        userService.borrowBook(userId, bookId);
-        return ResponseEntity.ok("Book borrowed successfully");
+        try {
+            log.info("user borrowed book");
+            userService.borrowBook(userId, bookId);
+            return ResponseEntity.ok("Book borrowed successfully");
+        } catch(Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/{userId}/return/{bookId}")

@@ -33,7 +33,12 @@ public class AdminService {
     // Admin management methods
     public Admin getAdminByEmail(String email) {
         log.info("Fetching admin with email: {}", email);
-        return adminRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Admin not found"));
+        try {
+            return adminRepository.findByEmail(email).orElseThrow(() -> new Exception("Admin with email " + email + " not found"));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to fetch admin: " + e.getMessage());
+        }
     }
 
     public Admin addAdmin(Admin admin) {
@@ -49,7 +54,12 @@ public class AdminService {
 
     public Book getBookById(Long id) {
         log.info("Fetching book with id: {}", id);
-        return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        try {
+            return bookRepository.findById(id).orElseThrow(() -> new Exception("Book with id " + id + " not found"));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to fetch book: " + e.getMessage());
+        }
     }
 
     public Book addBook(Book book) {
@@ -64,19 +74,29 @@ public class AdminService {
     }
 
     public void deleteBook(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
-        bookRepository.delete(book);
-        log.info("Deleting book with id: {}", id);
+        try {
+            Book book = bookRepository.findById(id).orElseThrow(() -> new Exception("Book with id " + id + " not found"));
+            bookRepository.delete(book);
+            log.info("Deleting book with id: {}", id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to delete book: " + e.getMessage());
+        }
     }
 
     public boolean updateBookCopies(Long id, int newTotalCopies) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
-        if (newTotalCopies >= book.getCopiesAvailable()) {
-            book.setCopiesAvailable(newTotalCopies);
-            bookRepository.save(book);
-            return true;
+        try {
+            Book book = bookRepository.findById(id).orElseThrow(() -> new Exception("Book with id " + id + " not found"));
+            if (newTotalCopies >= book.getCopiesAvailable()) {
+                book.setCopiesAvailable(newTotalCopies);
+                bookRepository.save(book);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to update book copies: " + e.getMessage());
         }
-        return false;
     }
 
     // User management methods
@@ -87,7 +107,12 @@ public class AdminService {
 
     public User getUserById(Long id) {
         log.info("Fetching user with id: {}", id);
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        try {
+            return userRepository.findById(id).orElseThrow(() -> new Exception("User with id " + id + " not found"));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to fetch user: " + e.getMessage());
+        }
     }
 
     public User addUser(User user) {
@@ -103,7 +128,12 @@ public class AdminService {
 
     public void deleteUser(Long id) {
         log.info("Deleting user with id: {}", id);
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to delete user: " + e.getMessage());
+        }
     }
 
     // Borrow record management methods
@@ -114,7 +144,12 @@ public class AdminService {
 
     public BorrowRecord getBorrowRecordById(Long id) {
         log.info("Fetching borrow record with id: {}", id);
-        return borrowRecordRepository.findById(id).orElseThrow(() -> new RuntimeException("Borrow record not found"));
+        try {
+            return borrowRecordRepository.findById(id).orElseThrow(() -> new Exception("Borrow record with id " + id + " not found"));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to fetch borrow record: " + e.getMessage());
+        }
     }
 
     public BorrowRecord addBorrowRecord(BorrowRecord borrowRecord) {
@@ -129,8 +164,13 @@ public class AdminService {
     }
 
     public void deleteBorrowRecord(Long id) {
-        BorrowRecord borrowRecord = borrowRecordRepository.findById(id).orElseThrow(() -> new RuntimeException("Borrow record not found"));
-        borrowRecordRepository.delete(borrowRecord);
-        log.info("Deleting borrow record with id: {}", id);
+        try {
+            BorrowRecord borrowRecord = borrowRecordRepository.findById(id).orElseThrow(() -> new Exception("Borrow record with id " + id + " not found"));
+            borrowRecordRepository.delete(borrowRecord);
+            log.info("Deleting borrow record with id: {}", id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException("Failed to delete borrow record: " + e.getMessage());
+        }
     }
 }

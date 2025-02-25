@@ -6,12 +6,16 @@ import com.library.Library.model.User;
 import com.library.Library.model.BorrowRecord;
 import com.library.Library.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+@Slf4j
 public class AdminController {
 
     @Autowired
@@ -19,96 +23,156 @@ public class AdminController {
 
     // Admin management endpoints
     @GetMapping("/admins/{email}")
-    public Admin getAdminByEmail(@PathVariable String email) {
-        return adminService.getAdminByEmail(email);
+    public ResponseEntity<?> getAdminByEmail(@PathVariable String email) {
+        log.info("Fetching admin with email: {}", email);
+        try {
+            return ResponseEntity.ok(adminService.getAdminByEmail(email));
+        } catch (Exception e) {
+            log.error("Error fetching admin with email {}: {}", email, e.getMessage());
+            return ResponseEntity.ok("Admin with email " + email + " not found");
+        }
     }
 
     @PostMapping("/admins")
-    public Admin addAdmin(@RequestBody Admin admin) {
-        return adminService.addAdmin(admin);
+    public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
+        log.info("Adding new admin with email: {}", admin.getEmail());
+        return ResponseEntity.ok(adminService.addAdmin(admin));
     }
 
     // Book management endpoints
     @GetMapping("/books")
-    public List<Book> getAllBooks() {
-        return adminService.getAllBooks();
+    public ResponseEntity<?> getAllBooks() {
+        log.info("Fetching all books");
+        return ResponseEntity.ok(adminService.getAllBooks());
     }
 
     @GetMapping("/books/{id}")
-    public Book getBookById(@PathVariable Long id) {
-        return adminService.getBookById(id);
+    public ResponseEntity<?> getBookById(@PathVariable Long id) {
+        log.info("Fetching book with id: {}", id);
+        try {
+            return ResponseEntity.ok(adminService.getBookById(id));
+        } catch (Exception e) {
+            log.error("Error fetching book with id {}: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping("/books")
-    public Book addBook(@RequestBody Book book) {
-        return adminService.addBook(book);
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        log.info("Adding new book with title: {}", book.getTitle());
+        return ResponseEntity.ok(adminService.addBook(book));
     }
 
     @PutMapping("/books/{id}")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
-        return adminService.updateBook(id, book);
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
+        log.info("Updating book with id: {}", id);
+        return ResponseEntity.ok(adminService.updateBook(id, book));
     }
 
     @DeleteMapping("/books/{id}")
-    public void deleteBook(@PathVariable Long id) {
-        adminService.deleteBook(id);
+    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+        log.info("Deleting book with id: {}", id);
+        try {
+            adminService.deleteBook(id);
+            return ResponseEntity.ok("Book with id " + id + " deleted successfully");
+        } catch (Exception e) {
+            log.error("Error deleting book with id {}: {}", id, e.getMessage());
+            return ResponseEntity.ok("Book with id " + id + " not found");
+        }
     }
 
     @PutMapping("/books/{id}/copies/{newTotalCopies}")
-    public boolean updateBookCopies(@PathVariable Long id, @PathVariable int newTotalCopies) {
-        return adminService.updateBookCopies(id, newTotalCopies);
+    public ResponseEntity<?> updateBookCopies(@PathVariable Long id, @PathVariable int newTotalCopies) {
+        log.info("Updating book copies for book with id: {}", id);
+        try {
+            return ResponseEntity.ok(adminService.updateBookCopies(id, newTotalCopies));
+        } catch (Exception e) {
+            log.error("Error updating book copies for book with id {}: {}", id, e.getMessage());
+            return ResponseEntity.ok("Failed to update book copies: " + e.getMessage());
+        }
     }
 
     // User management endpoints
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return adminService.getAllUsers();
+    public ResponseEntity<?> getAllUsers() {
+        log.info("Fetching all users");
+        return ResponseEntity.ok(adminService.getAllUsers());
     }
 
     @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return adminService.getUserById(id);
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        log.info("Fetching user with id: {}", id);
+        try {
+            return ResponseEntity.ok(adminService.getUserById(id));
+        } catch (Exception e) {
+            log.error("Error fetching user with id {}: {}", id, e.getMessage());
+            return ResponseEntity.ok("User with id " + id + " not found");
+        }
     }
 
     @PostMapping("/users")
-    public User addUser(@RequestBody User user) {
-        return adminService.addUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        log.info("Adding new user with email: {}", user.getEmail());
+        return ResponseEntity.ok(adminService.addUser(user));
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return adminService.updateUser(id, user);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        log.info("Updating user with id: {}", id);
+        return ResponseEntity.ok(adminService.updateUser(id, user));
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        adminService.deleteUser(id);
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        log.info("Deleting user with id: {}", id);
+        try {
+            adminService.deleteUser(id);
+            return ResponseEntity.ok("User with id " + id + " deleted successfully");
+        } catch (Exception e) {
+            log.error("Error deleting user with id {}: {}", id, e.getMessage());
+            return ResponseEntity.ok("User with id " + id + " not found");
+        }
     }
 
     // Borrow record management endpoints
     @GetMapping("/borrowRecords")
-    public List<BorrowRecord> getAllBorrowRecords() {
-        return adminService.getAllBorrowRecords();
+    public ResponseEntity<?> getAllBorrowRecords() {
+        log.info("Fetching all borrow records");
+        return ResponseEntity.ok(adminService.getAllBorrowRecords());
     }
 
     @GetMapping("/borrowRecords/{id}")
-    public BorrowRecord getBorrowRecordById(@PathVariable Long id) {
-        return adminService.getBorrowRecordById(id);
+    public ResponseEntity<?> getBorrowRecordById(@PathVariable Long id) {
+        log.info("Fetching borrow record with id: {}", id);
+        try {
+            return ResponseEntity.ok(adminService.getBorrowRecordById(id));
+        } catch (Exception e) {
+            log.error("Error fetching borrow record with id {}: {}", id, e.getMessage());
+            return ResponseEntity.ok("Borrow record with id " + id + " not found");
+        }
     }
 
     @PostMapping("/borrowRecords")
-    public BorrowRecord addBorrowRecord(@RequestBody BorrowRecord borrowRecord) {
-        return adminService.addBorrowRecord(borrowRecord);
+    public ResponseEntity<BorrowRecord> addBorrowRecord(@RequestBody BorrowRecord borrowRecord) {
+        log.info("Adding new borrow record for user: {}", borrowRecord.getUser().getEmail());
+        return ResponseEntity.ok(adminService.addBorrowRecord(borrowRecord));
     }
 
     @PutMapping("/borrowRecords/{id}")
-    public BorrowRecord updateBorrowRecord(@PathVariable Long id, @RequestBody BorrowRecord borrowRecord) {
-        return adminService.updateBorrowRecord(id, borrowRecord);
+    public ResponseEntity<BorrowRecord> updateBorrowRecord(@PathVariable Long id, @RequestBody BorrowRecord borrowRecord) {
+        log.info("Updating borrow record with id: {}", id);
+        return ResponseEntity.ok(adminService.updateBorrowRecord(id, borrowRecord));
     }
 
     @DeleteMapping("/borrowRecords/{id}")
-    public void deleteBorrowRecord(@PathVariable Long id) {
-        adminService.deleteBorrowRecord(id);
-
+    public ResponseEntity<?> deleteBorrowRecord(@PathVariable Long id) {
+        log.info("Deleting borrow record with id: {}", id);
+        try {
+            adminService.deleteBorrowRecord(id);
+            return ResponseEntity.ok("Borrow record with id " + id + " deleted successfully");
+        } catch (Exception e) {
+            log.error("Error deleting borrow record with id {}: {}", id, e.getMessage());
+            return ResponseEntity.ok("Borrow record with id " + id + " not found");
+        }
     }
 }
