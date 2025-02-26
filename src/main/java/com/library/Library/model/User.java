@@ -4,17 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.library.Library.ENUM.Role;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Data
 @NoArgsConstructor
 @Entity
 public class User {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "LONG")
     private long id;
 
@@ -27,7 +28,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<BorrowRecord> borrowedBooks= new ArrayList<>();
+    private List<BorrowRecord> borrowedBooks = new ArrayList<>();
 }

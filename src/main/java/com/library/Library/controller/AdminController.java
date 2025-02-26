@@ -29,19 +29,19 @@ public class AdminController {
             return ResponseEntity.ok(adminService.getAdminByEmail(email));
         } catch (Exception e) {
             log.error("Error fetching admin with email {}: {}", email, e.getMessage());
-            return ResponseEntity.ok("Admin with email " + email + " not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin with email " + email + " not found");
         }
     }
 
     @PostMapping("/admins")
     public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
         log.info("Adding new admin with email: {}", admin.getEmail());
-        return ResponseEntity.ok(adminService.addAdmin(admin));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.addAdmin(admin));
     }
 
     // Book management endpoints
     @GetMapping("/books")
-    public ResponseEntity<?> getAllBooks() {
+    public ResponseEntity<List<Book>> getAllBooks() {
         log.info("Fetching all books");
         return ResponseEntity.ok(adminService.getAllBooks());
     }
@@ -53,14 +53,14 @@ public class AdminController {
             return ResponseEntity.ok(adminService.getBookById(id));
         } catch (Exception e) {
             log.error("Error fetching book with id {}: {}", id, e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book with id " + id + " not found");
         }
     }
 
     @PostMapping("/books")
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
         log.info("Adding new book with title: {}", book.getTitle());
-        return ResponseEntity.ok(adminService.addBook(book));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.addBook(book));
     }
 
     @PutMapping("/books/{id}")
@@ -74,10 +74,10 @@ public class AdminController {
         log.info("Deleting book with id: {}", id);
         try {
             adminService.deleteBook(id);
-            return ResponseEntity.ok("Book with id " + id + " deleted successfully");
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             log.error("Error deleting book with id {}: {}", id, e.getMessage());
-            return ResponseEntity.ok("Book with id " + id + " not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book with id " + id + " not found");
         }
     }
 
@@ -88,13 +88,13 @@ public class AdminController {
             return ResponseEntity.ok(adminService.updateBookCopies(id, newTotalCopies));
         } catch (Exception e) {
             log.error("Error updating book copies for book with id {}: {}", id, e.getMessage());
-            return ResponseEntity.ok("Failed to update book copies: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update book copies: " + e.getMessage());
         }
     }
 
     // User management endpoints
     @GetMapping("/users")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         log.info("Fetching all users");
         return ResponseEntity.ok(adminService.getAllUsers());
     }
@@ -106,14 +106,14 @@ public class AdminController {
             return ResponseEntity.ok(adminService.getUserById(id));
         } catch (Exception e) {
             log.error("Error fetching user with id {}: {}", id, e.getMessage());
-            return ResponseEntity.ok("User with id " + id + " not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id " + id + " not found");
         }
     }
 
     @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         log.info("Adding new user with email: {}", user.getEmail());
-        return ResponseEntity.ok(adminService.addUser(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.addUser(user));
     }
 
     @PutMapping("/users/{id}")
@@ -127,16 +127,16 @@ public class AdminController {
         log.info("Deleting user with id: {}", id);
         try {
             adminService.deleteUser(id);
-            return ResponseEntity.ok("User with id " + id + " deleted successfully");
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             log.error("Error deleting user with id {}: {}", id, e.getMessage());
-            return ResponseEntity.ok("User with id " + id + " not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id " + id + " not found");
         }
     }
 
     // Borrow record management endpoints
     @GetMapping("/borrowRecords")
-    public ResponseEntity<?> getAllBorrowRecords() {
+    public ResponseEntity<List<BorrowRecord>> getAllBorrowRecords() {
         log.info("Fetching all borrow records");
         return ResponseEntity.ok(adminService.getAllBorrowRecords());
     }
@@ -148,14 +148,14 @@ public class AdminController {
             return ResponseEntity.ok(adminService.getBorrowRecordById(id));
         } catch (Exception e) {
             log.error("Error fetching borrow record with id {}: {}", id, e.getMessage());
-            return ResponseEntity.ok("Borrow record with id " + id + " not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrow record with id " + id + " not found");
         }
     }
 
     @PostMapping("/borrowRecords")
     public ResponseEntity<BorrowRecord> addBorrowRecord(@RequestBody BorrowRecord borrowRecord) {
         log.info("Adding new borrow record for user: {}", borrowRecord.getUser().getEmail());
-        return ResponseEntity.ok(adminService.addBorrowRecord(borrowRecord));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.addBorrowRecord(borrowRecord));
     }
 
     @PutMapping("/borrowRecords/{id}")
@@ -169,10 +169,10 @@ public class AdminController {
         log.info("Deleting borrow record with id: {}", id);
         try {
             adminService.deleteBorrowRecord(id);
-            return ResponseEntity.ok("Borrow record with id " + id + " deleted successfully");
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             log.error("Error deleting borrow record with id {}: {}", id, e.getMessage());
-            return ResponseEntity.ok("Borrow record with id " + id + " not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Borrow record with id " + id + " not found");
         }
     }
 }
