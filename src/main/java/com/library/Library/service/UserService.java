@@ -9,6 +9,7 @@ import com.library.Library.repository.BorrowRecordRepository;
 import com.library.Library.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,7 +25,10 @@ public class UserService {
     private final BookRepository bookRepository;
     private final BorrowRecordRepository borrowRecordRepository;
 
+    private BCryptPasswordEncoder encoder=new BCryptPasswordEncoder(12);
+
     public User registerUser(User user){
+        user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

@@ -1,15 +1,15 @@
 package com.library.Library.service;
 
-import com.library.Library.model.Admin;
+
 import com.library.Library.model.Book;
 import com.library.Library.model.User;
 import com.library.Library.model.BorrowRecord;
-import com.library.Library.repository.AdminRepository;
 import com.library.Library.repository.BookRepository;
 import com.library.Library.repository.UserRepository;
 import com.library.Library.repository.BorrowRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +18,6 @@ import java.util.List;
 @Service
 public class AdminService {
 
-    @Autowired
-    private AdminRepository adminRepository;
 
     @Autowired
     private BookRepository bookRepository;
@@ -30,20 +28,23 @@ public class AdminService {
     @Autowired
     private BorrowRecordRepository borrowRecordRepository;
 
+    private BCryptPasswordEncoder encoder= new BCryptPasswordEncoder(12);
+
     // Admin management methods
-    public Admin getAdminByEmail(String email) {
+    public User getAdminByEmail(String email) {
         log.info("Fetching admin with email: {}", email);
         try {
-            return adminRepository.findByEmail(email).orElseThrow(() -> new Exception("Admin with email " + email + " not found"));
+            return userRepository.findByEmail(email).orElseThrow(() -> new Exception("Admin with email " + email + " not found"));
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException("Failed to fetch admin: " + e.getMessage());
         }
     }
 
-    public Admin addAdmin(Admin admin) {
+    public User addAdmin(User admin) {
         log.info("Adding new admin with email: {}", admin.getEmail());
-        return adminRepository.save(admin);
+        admin.setPassword(encoder.encode(admin.getPassword()));
+        return userRepository.save(admin);
     }
 
     // Book management methods
@@ -117,6 +118,7 @@ public class AdminService {
 
     public User addUser(User user) {
         log.info("Adding new user with email: {}", user.getEmail());
+        user.setPassword(encoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

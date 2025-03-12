@@ -1,6 +1,5 @@
 package com.library.Library.controller;
 
-import com.library.Library.model.Admin;
 import com.library.Library.model.Book;
 import com.library.Library.model.User;
 import com.library.Library.model.BorrowRecord;
@@ -34,9 +33,9 @@ public class AdminController {
     }
 
     @PostMapping("/admins")
-    public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin) {
-        log.info("Adding new admin with email: {}", admin.getEmail());
-        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.addAdmin(admin));
+    public ResponseEntity<User> addAdmin(@RequestBody User user) {
+        log.info("Adding new admin with email: {}", user.getEmail());
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminService.addAdmin(user));
     }
 
     // Book management endpoints
@@ -101,8 +100,8 @@ public class AdminController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        log.info("Fetching user with id: {}", id);
         try {
+            log.info("Fetching user with id: {}", id);
             return ResponseEntity.ok(adminService.getUserById(id));
         } catch (Exception e) {
             log.error("Error fetching user with id {}: {}", id, e.getMessage());
